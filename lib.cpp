@@ -3,11 +3,50 @@
 // This is done by Parth Maniar 200671
 // */
 #include <iostream>
-#include <string.h>
+#include <string>
 #include <stdlib.h>
 #include <vector>
 //#include "lbm.hpp"
 using namespace std;
+
+class Date{
+    private:
+        int days;
+        int months;
+        int years;
+    public:
+        Date(void){
+            days = 0;
+            months = 0;
+            years = 0;
+        }
+       Date(int d, int m, int y){
+           days = d;
+           months = m;
+           years = y;
+       }
+       //~Date();
+
+       int difference(Date d){
+           int monthDays[]={0, 31,28,31,30,31,30,31,31,30,31,30,31};
+
+            if(months==d.months) return days-d.days;
+            else if(months>d.months){
+                int diff=0;
+                for(int i=d.months;i<months;i++){
+                    diff+=monthDays[i];
+                }
+                return diff+days-d.days;
+            }
+            else{
+                int diff=0;
+                for(int i=months;i<d.months;i++){
+                    diff+=monthDays[i];
+                }
+                return diff+d.days-days;
+            }
+       }
+};
 
 class users{
     public:
@@ -16,6 +55,7 @@ class users{
         string id;
         int type; // type: 0 for professor, 1 for user, 2 for librarian;
         vector<string> issued_books;
+        int fine;
         // int fine_calculator(int date_issued, int date_returned, int fine_per_day, int type){
         //     int fine = 0;
         //     if(type==0){
@@ -41,9 +81,8 @@ class book{
 
         bool issued=false;
         users issued_by=users();
-        int issued_date;
+        Date issued_date;
 };
-
 
 vector<users> list_of_users;
 vector<book> list_of_books;
@@ -57,22 +96,24 @@ class book_database{
         void add_book(){
             book new_book;
             cout<<"Enter the name of the book: ";
-            cin>>new_book.name;
+            getline(cin, new_book.name);
             cout<<"Enter the author of the book: ";
-            cin>>new_book.author;
+            getline(cin, new_book.author);
             cout<<"Enter the ISBN of the book: ";
-            cin>>new_book.ISBN;
+            getline(cin, new_book.ISBN);
             cout<<"Enter the publication of the book: ";
-            cin>>new_book.publication;
+            getline(cin, new_book.publication);
             new_book.issued=false;
             //new_book.issued_by=;
-            new_book.issued_date=0;
+            new_book.issued_date=Date(0,0,0);
+
+            cout<<"Book added successfully!"<<endl;
             list_of_books.push_back(new_book);
         }
         void search_book(){
             string search_book;
             cout<<"Enter the name of the book you want to search: ";
-            cin>>search_book;
+            getline(cin, search_book);
             for(int i=0; i<list_of_books.size(); i++){
                 if(list_of_books[i].name == search_book){
                     cout << "Book found!" << endl;
@@ -92,7 +133,7 @@ class book_database{
         void delete_book(){
             string delete_book_name;
             cout<<"Enter the name of the book you want to delete: ";
-            cin>>delete_book_name;
+            getline(cin, delete_book_name);
             for(int i=0; i<list_of_books.size(); i++){
                 if(list_of_books[i].name == delete_book_name){
                     list_of_books.erase(list_of_books.begin()+i);
@@ -116,11 +157,11 @@ class book_database{
 
             if(choice==1){
                     string delete_book_name;
-                    cout<<"Enter the name of the book you want to search: ";
-                    cin>>delete_book_name;
+                    cout<<"Enter the name of the book you want to update: ";
+                    getline(cin, delete_book_name);
                     string new_name;
                     cout<<"Enter the new name: ";
-                    cin>>new_name;
+                    getline(cin, new_name);
                     
                     for(int i=0; i<list_of_books.size(); i++){
                         if(list_of_books[i].name == delete_book_name){
@@ -132,12 +173,12 @@ class book_database{
             }
             if(choice==2){
                     string delete_book_name;
-                    cout<<"Enter the name of the book you want to search: ";
-                    cin>>delete_book_name;
+                    cout<<"Enter the name of the book you want to update: ";
+                    getline(cin, delete_book_name);
                     
                     string new_author;
                     cout<<"Enter the new author: ";
-                    cin>>new_author;
+                    getline(cin, new_author);
                     
                     for(int i=0; i<list_of_books.size(); i++){
                         if(list_of_books[i].name == delete_book_name){
@@ -150,44 +191,44 @@ class book_database{
             }
             if(choice==3){
                     string delete_book_name;
-                    cout<<"Enter the name of the book you want to search: ";
-                    cin>>delete_book_name;
+                    cout<<"Enter the name of the book you want to update: ";
+                    getline(cin, delete_book_name);
                     
                     string new_ISBN;
                     cout<<"Enter the new ISBN: ";
-                    cin>>new_ISBN;
+                    getline(cin, new_ISBN);
                     
                     for(int i=0; i<list_of_books.size(); i++){
                         if(list_of_books[i].name == delete_book_name){
                             list_of_books[i].ISBN = new_ISBN;
-                            cout << "Book updated!" << endl;
+                            cout<<"Book updated!"<<endl;
                             return;
                         }
                     }
-                    cout << "Book not found!" << endl;
+                    cout<<"Book not found!"<<endl;
             }
             if(choice==4){
                     string delete_book_name;
-                    cout<<"Enter the name of the book you want to search: ";
-                    cin>>delete_book_name;
+                    cout<<"Enter the name of the book you want to update: ";
+                    getline(cin, delete_book_name);
                     
                     string new_publication;
                     cout<<"Enter the new publication: ";
-                    cin>>new_publication;
+                    getline(cin, new_publication);
                     
                     for(int i=0; i<list_of_books.size(); i++){
                         if(list_of_books[i].name == delete_book_name){
                             list_of_books[i].publication = new_publication;
-                            cout << "Book updated!" << endl;
+                            cout<<"Book updated!"<<endl;
                             return;
                         }
                     }
-                    cout << "Book not found!" << endl;
+                    cout<<"Book not found!"<<endl;
             }
             if(choice==5){
                     string delete_book_name;
-                    cout<<"Enter the name of the book you want to search: ";
-                    cin>>delete_book_name;
+                    cout<<"Enter the name of the book you want to update: ";
+                    getline(cin, delete_book_name);
                     
                     bool new_issued;
                     cout<<"Enter the new issued: ";
@@ -196,11 +237,11 @@ class book_database{
                     for(int i=0; i<list_of_books.size(); i++){
                         if(list_of_books[i].name == delete_book_name){
                             list_of_books[i].issued = new_issued;
-                            cout << "Book updated!" << endl;
+                            cout<<"Book updated!"<<endl;
                             return;
                         }
                     }
-                    cout << "Book not found!" << endl;
+                    cout<<"Book not found!"<<endl;
             }
        }
        void show_books(){
@@ -219,28 +260,36 @@ class book_database{
        }
        void issue_book(users user_obj){
             string issue_book_name;
-            int date;
-            cout<<"Today's Date: ";
-            cin>>date;
+            int y, m, d;
+
+            cout<<"Issue Date (year): ";
+            cin>>y;
+            cout<<"Issue Date (month): ";
+            cin>>m;
+            cout<<"Issue Date (day): ";
+            cin>>d;
+            
+            Date issue_date(y, m, d);
+
             cout<<"Enter the name of the book user wants to issue: ";
-            cin>>issue_book_name;
+            getline(cin, issue_book_name);
 
             for(int i=0; i<list_of_books.size(); i++){
                 if(list_of_books[i].name == issue_book_name){
                     if(list_of_books[i].issued == true){
                         cout << "Book already issued!" << endl;
-                        cout<<"Whether to issue another boook?(y/n): ";
-                        char c;
-                        cin>>c;
-                        while(c=='y' || c=='Y' || c=='N' || c=='n'){
-                            if(c=='y' || c=='Y'){
-                                issue_book(user_obj);
-                            }
-                            else if(c=='n' || c=='N'){
-                                return;
-                            }
-                        return;
-                        }
+                        // cout<<"Whether to issue another boook?(y/n): ";
+                        // char c;
+                        // cin>>c;
+                        // while(c=='y' || c=='Y' || c=='N' || c=='n'){
+                        //     if(c=='y' || c=='Y'){
+                        //         issue_book(user_obj);
+                        //     }
+                        //     else if(c=='n' || c=='N'){
+                        //         return;
+                        //     }
+                        // return;
+                        // }
                     }
                     else{
                         if(user_obj.type==1 && user_obj.issued_books.size()>5){
@@ -249,40 +298,61 @@ class book_database{
                         }
                         list_of_books[i].issued = true;
                         list_of_books[i].issued_by = user_obj;
-                        list_of_books[i].issued_date = date;
+                        list_of_books[i].issued_date = issue_date;
                         user_obj.issued_books.push_back(list_of_books[i].name);
                         cout << "Book issued!" << endl;
                         return;
                     }
                 }
             }
-            cout << "Book not found!" << endl;
+            //cout << "Book not found! Try Again" << endl;
+            issue_book(user_obj);
        }
-       void return_book(users user_obj, int date){
+       void return_book(users user_obj){
             string return_book_name;
             cout<<"Enter the name of the book user wants to return: ";
-            cin>>return_book_name;
+            getline(cin, return_book_name);
+
+            int d, m, y;
+            cout<<"Return Date (year yyyy): ";
+            cin>>y;
+            cout<<"Return Date (month m): ";
+            cin>>m;
+            cout<<"Return Date (day dd): ";
+            cin>>d;
+
+            Date return_date(y, m, d);
+
             for(int i=0; i<list_of_books.size(); i++){
                 if(list_of_books[i].name == return_book_name){
                     if(list_of_books[i].issued == false){
                         cout << "Book not issued!" << endl;
-                        cout<<"Whether to return another book?(y/n): ";
-                        char c;
-                        cin>>c;
-                        while(c=='y' || c=='Y' || c=='N' || c=='n'){
-                            if(c=='y' || c=='Y'){
-                                return_book(user_obj, date);
-                            }
-                            else if(c=='n' || c=='N'){
-                                return;
-                            }
-                        return;
-                        }
+                        // cout<<"Whether to return another book?(y/n): ";
+                        // char c;
+                        // cin>>c;
+                        // while(c=='y' || c=='Y' || c=='N' || c=='n'){
+                        //     if(c=='y' || c=='Y'){
+                        //         return_book(user_obj, date);
+                        //     }
+                        //     else if(c=='n' || c=='N'){
+                        //         return;
+                        //     }
+                        // return;
+                        // }
+
                     }
                     else{
                         list_of_books[i].issued = false;
                         //list_of_books[i].issued_by = use;
-                        list_of_books[i].issued_date = 0;
+                        if(user_obj.type=1 && return_date.difference(list_of_books[i].issued_date)>30){
+                            user_obj.fine = (return_date.difference(list_of_books[i].issued_date)-30)*2;
+                        }
+
+                        if(user_obj.type=0 && return_date.difference(list_of_books[i].issued_date)>60){
+                            user_obj.fine = (return_date.difference(list_of_books[i].issued_date)-60)*5;
+                        }
+                        
+                        list_of_books[i].issued_date = Date(0,0,0);
                        // int element= find(user_obj.issued_books.begin(), user_obj.issued_books.end(), list_of_books[i].name)-user_obj.issued_books.begin();
                         //3user_obj.issued_books.erase(user_obj.issued_books.begin()+element);
                         cout << "Book returned!" << endl;
@@ -299,36 +369,36 @@ class user_database{
         void add_user(){
             users new_user;
             cout << "Enter name: ";
-            cin >> new_user.name;
+            getline(cin, new_user.name);
             cout << "Enter password: ";
-            cin >> new_user.password;
+            getline(cin, new_user.password);
             cout << "Enter id: ";
-            cin >> new_user.id;
-            cout << "Enter type: ";
+            getline(cin, new_user.id);
+            cout << "Enter role (type: 0 for professor, 1 for user, 2 for librarian): ";
             cin >> new_user.type;
             list_of_users.push_back(new_user);
             cout<<"User added!"<<endl;
-            cout<<"Whether to add another user?(y/n): ";
-            char c;
-            cin>>c;
-            while(c=='y' || c=='Y' || c=='N' || c=='n'){
-                if(c=='y' || c=='Y'){
-                    add_user();
-                }
-                else if(c=='n' || c=='N'){
-                    return;
-                }
-                else{
-                    cout<<"Invalid input!"<<endl;
-                    cout<<"Whether to add another user?(y/n): ";
-                    cin>>c;
-                }
-            }
+            // cout<<"Whether to add another user?(y/n): ";
+            // char c;
+            // cin>>c;
+            // while(c=='y' || c=='Y' || c=='N' || c=='n'){
+            //     if(c=='y' || c=='Y'){
+            //         add_user();
+            //     }
+            //     else if(c=='n' || c=='N'){
+            //         return;
+            //     }
+            //     else{
+            //         cout<<"Invalid input!"<<endl;
+            //         cout<<"Whether to add another user?(y/n): ";
+            //         cin>>c;
+            //     }
+            // }
         };
         void search_user(){
             cout<<"Enter name: ";
             string name;
-            cin>>name;
+            getline(cin, name);
             int j=0;
             for(int i=0; i<list_of_users.size(); i++){
                 if(list_of_users[i].name == name){
@@ -336,20 +406,20 @@ class user_database{
                     cout<<j<<" User"<<endl;
                     cout<<"Name: "<<list_of_users[i].name<<endl;
                     cout<<"Id: "<<list_of_users[i].id<<endl;
-                    cout<<"Type: "<<list_of_users[i].type<<endl;
+                    cout<<"Role (0 for professor, 1 for user, 2 for librarian): "<<list_of_users[i].type<<endl;
                     cout<<"----------------------------------------"<<endl;
                 }
             }
             if(j==0) cout<<"User not found"<<endl;
-            return;
+            //return;
         };
         void delete_user(){
             cout<<"Enter name: ";
             string name;
-            cin>>name;
-            cout<<"Enter id: ";
+            getline(cin, name);
+            cout<<"Enter user id: ";
             string id;
-            cin>>id;
+            getline(cin,id);
             cout<<"Enter type: ";
             int type;
             cin>>type;
@@ -357,7 +427,7 @@ class user_database{
                 if(list_of_users[i].name == name && list_of_users[i].id == id && list_of_users[i].type == type){
                     list_of_users.erase(list_of_users.begin()+i);
                     cout<<"User deleted!"<<endl;
-                    return;
+                    //return;
                 }
             }
             cout<<"User not found!"<<endl;
@@ -375,11 +445,11 @@ class user_database{
             if(choice==1){
                     cout<<"Enter name: ";
                     string name;
-                    cin>>name;
+                    getline(cin, name);
                     cout<<"Enter id: ";
                     string id;
-                    cin>>id;
-                    cout<<"Enter type: ";
+                    getline(cin, id);
+                    cout<<"Enter role (0 for professor, 1 for user, 2 for librarian): ";
                     int type;
                     cin>>type;
                     for(int i=0; i<list_of_users.size(); i++){
@@ -395,10 +465,10 @@ class user_database{
             if(choice==2){
                     cout<<"Enter name: ";
                     string name;
-                    cin>>name;
+                    getline(cin, name);
                     cout<<"Enter id: ";
                     string id;
-                    cin>>id;
+                    getline(cin, id);
                     cout<<"Enter type: ";
                     int type;
                     cin>>type;
@@ -415,11 +485,11 @@ class user_database{
             if(choice==3){
                     cout<<"Enter name: ";
                     string name;
-                    cin>>name;
+                    getline(cin, name);
                     cout<<"Enter id: ";
                     string id;
-                    cin>>id;
-                    cout<<"Enter type: ";
+                    getline(cin, id);
+                    cout<<"Enter role (0 for professor, 1 for user, 2 for librarian): ";
                     int type;
                     cin>>type;
                     for(int i=0; i<list_of_users.size(); i++){
@@ -427,7 +497,7 @@ class user_database{
                             cout<<"Enter new id: ";
                             cin>>list_of_users[i].id;
                             cout<<"User updated!"<<endl;
-                            return;
+                            //return;
                         }
                     }
                     cout<<"User not found!"<<endl;
@@ -435,10 +505,10 @@ class user_database{
             if(choice==4){
                     cout<<"Enter name: ";
                     string name;
-                    cin>>name;
+                    getline(cin, name);
                     cout<<"Enter id: ";
                     string id;
-                    cin>>id;
+                    getline(cin, id);
                     cout<<"Enter type: ";
                     int type;
                     cin>>type;
@@ -447,7 +517,7 @@ class user_database{
                             cout<<"Enter type: ";
                             cin>>list_of_users[i].type;
                             cout<<"User updated!"<<endl;
-                            return;
+                            //return;
                         }
                     }
                     cout<<"User not found!"<<endl;
@@ -460,10 +530,9 @@ class user_database{
                 cout<<"Name: "<<list_of_users[i].name<<endl;
                 cout<<"Password: "<<list_of_users[i].password<<endl;
                 cout<<"Id: "<<list_of_users[i].id<<endl;
-                cout<<"Type: "<<list_of_users[i].type<<endl;
+                cout<<"Role (0 for professor, 1 for user, 2 for librarian): "<<list_of_users[i].type<<endl;
             }
         };
-
 }; 
 user_database user_db;
 book_database book_db;
@@ -499,6 +568,12 @@ class librarian: public users{
         void update_book(){
             book_db.update_book();
         };
+        void show_all_books(){
+            book_db.show_books();
+        };
+        void show_all_users(){
+            user_db.display_all_users();
+        };
 };
 
 class professor: public users{
@@ -513,14 +588,14 @@ class professor: public users{
         // void show_book(){
         //     book_db.show_books();
         // };
-        int fine_calculator(int date_issued){
-            int date_returned = date_issued+60;
-            int fine = 0;
-            if(date_returned - date_issued > 15){
-                fine = (date_returned - date_issued - 15)*5;
-            }
-            return fine;
-        };
+        // int fine_calculator(int date_issued){
+        //     int date_returned = date_issued+60;
+        //     int fine = 0;
+        //     if(date_returned - date_issued > 15){
+        //         fine = (date_returned - date_issued - 15)*5;
+        //     }
+        //     return fine;
+        // };
 };
 
 class Student: public users{
@@ -537,14 +612,14 @@ class Student: public users{
         // void show_book(){
         //     book_db.show_books();
         // };
-        int fine_calculator(int date_issued){
-            int date_returned = date_issued+30;
-            int fine = 0;
-            if(date_returned - date_issued > 15){
-                fine = (date_returned - date_issued - 15)*2;
-            }
-            return fine;
-        }
+        // int fine_calculator(int date_issued){
+        //     int date_returned = date_issued+30;
+        //     int fine = 0;
+        //     if(date_returned - date_issued > 15){
+        //         fine = (date_returned - date_issued - 15)*2;
+        //     }
+        //     return fine;
+        // }
         void issue_book(){
             book_db.issue_book(s);
         };
@@ -556,11 +631,14 @@ void Librarianmenu(){
     cout<<"2. Search User"<<endl;
     cout<<"3. Delete User"<<endl;
     cout<<"4. Update User"<<endl;
-    cout<<"5. Add Book"<<endl;
-    cout<<"6. Search Book"<<endl;
-    cout<<"7. Delete Book"<<endl;
-    cout<<"8. Update Book"<<endl;
-    cout<<"9. Logout"<<endl;
+    cout<<"5. Show all users"<<endl;
+    cout<<"6. Add Book"<<endl;
+    cout<<"7. Search Book"<<endl;
+    cout<<"8. Delete Book"<<endl;
+    cout<<"9. Update Book"<<endl;
+    cout<<"10. Show all Books"<<endl;
+    cout<<"11. Logout"<<endl;
+    
     cout<<"Enter your choice: ";
     int choice;
     cin>>choice;
@@ -578,18 +656,24 @@ void Librarianmenu(){
             lib.update_user();
             break;
         case 5:
-            lib.add_book();
+            lib.show_all_users();
             break;
         case 6:
-            lib.search_book();
+            lib.add_book();
             break;
         case 7:
-            lib.delete_book();
+            lib.search_book();
             break;
         case 8:
-            lib.update_book();
+            lib.delete_book();
             break;
         case 9:
+            lib.update_book();
+            break;
+        case 10:
+            lib.show_all_books();
+            break;
+        case 11:
             cout<<"Logged out!"<<endl;
             return;
             break;
@@ -618,16 +702,14 @@ void Studentmenu(users student){
             break;
         case 3:
             cout<<"Enter date issued: ";
-            int date;
             book_db.issue_book(student);
             break;
         case 4:
-            cout<<"Enter date returned: ";
-            int date_returned;
-            book_db.return_book(student, date_returned);
+            cout<<"Enter returned date: ";
+            book_db.return_book(student);
             break;
         case 5:
-           //cout<<student.fine_calculator(date);
+           cout<<student.fine;
            break;
         case 6:
             cout<<"Logged out!"<<endl;
@@ -655,11 +737,16 @@ void Profmenu(users prof){
             book_db.show_books();
             break;
         case 3:
-            cout<<"Enter date in";
-            int date;
             book_db.issue_book(prof);
             break;
-        case 4:
+       case 4:
+            cout<<"Enter returned date: ";
+            book_db.return_book(prof);
+            break;
+        case 5:
+           cout<<prof.fine;
+           break;
+        case 6:
             cout<<"Logged out!"<<endl;
             return;
             break;
@@ -681,48 +768,55 @@ void menu(){
     cin>>choice;
     string user_id;
     string password;
+    int flag=0;
     switch(choice){
         case 1:
             cout<<"Student"<<endl;
             cout<<"Please enter your user id: ";
-            cin>>user_id;
+            getline(cin, user_id);
             cout<<"password: ";
-            cin>>password;
+            getline(cin, password);
             for(int i=0; i<list_of_users.size(); i++){
                 if(list_of_users[i].id == user_id && list_of_users[i].password == password && list_of_users[i].type == 1){
                     cout<<"Welcome "<<list_of_users[i].name<<endl;
                     cout<<"You have sucefully logged in!"<<endl;
+                    flag=1;
                     Studentmenu(list_of_users[i]);
                 }
             }
+            if(flag==0) cout<<"Invalid user id or password!"<<endl;
             break;
         case 2:
             cout<<"Professor"<<endl;
             cout<<"Please enter your id: ";
-            cin>>user_id;
+            getline(cin, user_id);
             cout<<"password: ";
-            cin>>password;
+            getline(cin, password);
             for(int i=0; i<list_of_users.size(); i++){
                 if(list_of_users[i].id == user_id && list_of_users[i].password == password && list_of_users[i].type == 2){
                     cout<<"Logged in!"<<endl;
+                    flag=1;
                     Profmenu(list_of_users[i]);
                 }
             }
+            if(flag==0) cout<<"Invalid user id or password!"<<endl;
             break;
         case 3:
             
             cout<<"Librarian"<<endl;
             cout<<"Please enter your id: ";
-            cin>>user_id;
+            getline(cin, user_id);
             cout<<"password: ";
-            cin>>password;
+            getline(cin, password);
             for(int i=0; i<list_of_users.size(); i++){
                 if(list_of_users[i].id == user_id && list_of_users[i].password == password && list_of_users[i].type == 3){
                     cout<<"Welcome "<<list_of_users[i].name<<endl;
                     cout<<"You have sucefully logged in!"<<endl;
+                    flag=1;
                     Librarianmenu();
                 }
             }
+            if(flag==0) cout<<"Invalid user id or password!"<<endl;
             break;
         case 4:
             cout<<"Exit"<<endl;
