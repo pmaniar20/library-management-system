@@ -156,7 +156,6 @@ class book_database{
             if(flag==0) cout << "Book not found!" << endl;
         }
         void delete_book(){
-            //system("CLS");
             cout<<"Delete Book Menu"<<endl;
             string delete_book_name;
             cin.ignore();
@@ -172,7 +171,6 @@ class book_database{
             cout << "Book not found!" << endl;
         }
        void update_book(){
-            //system("CLS");
             cout<<"Update Book Menu"<<endl;
             cout<<"Which Field you want to update"<<endl;
             cout<<"1. Name"<<endl;
@@ -356,8 +354,10 @@ class book_database{
                         cout<<"Return Date (day dd): ";
                         cin>>d;
                         Date return_date(d, m, y);
+
                         list_of_books[i].issued = false;
-                        //list_of_books[i].issued_by = use;
+                        list_of_books[i].issued_by = "";
+
                         int diff=return_date.difference(list_of_books[i].issued_date);
                         //cout<<diff<<endl;
                         if(type=1 && diff>30){
@@ -403,12 +403,10 @@ class user_database{
             cout << "Enter role (type: 0 for professor, 1 for student, 2 for librarian): ";
             cin >> new_user.type;
             list_of_users.push_back(new_user);
-            //system("CLS");
             cout<<"User added!"<<endl;
-            
+            return;
         };
         void search_user(){
-            //system("CLS");
             cout<<"Search User Menu"<<endl;
             cout<<"Enter name: ";
             cin.ignore();
@@ -426,10 +424,9 @@ class user_database{
                 }
             }
             if(j==0) cout<<"User not found"<<endl;
-            //return;
+            return;
         };
         void delete_user(){
-            //system("CLS");
             cout<<"Delete User Menu"<<endl;
             cout<<"Enter name: ";
             cin.ignore();
@@ -723,43 +720,33 @@ void Librarianmenu(librarian &lib){
     cout<<endl;
     switch(choice){
         case 1:
-            //system("CLS");
             lib.add_user();
             break;
         case 2:
-            //system("CLS");
             lib.search_user();
             break;
         case 3:
-            //system("CLS");
             lib.delete_user();
             break;
         case 4:
-            //system("CLS");
             lib.update_user();
             break;
         case 5:
-            //system("CLS");
             lib.show_all_users();
             break;
         case 6:
-            //system("CLS");
             lib.add_book();
             break;
         case 7:
-            //system("CLS");
             lib.search_book();
             break;
         case 8:
-            //system("CLS");
             lib.delete_book();
             break;
         case 9:
-            //system("CLS");
             lib.update_book();
             break;
         case 10:
-            //system("CLS");
             lib.show_all_books();
             break;
         case 11:
@@ -773,8 +760,8 @@ void Librarianmenu(librarian &lib){
     }
     Librarianmenu(lib);
 }
+
 void Studentmenu(Student &student){
-    //system("CLS");
     cout<<"1. Search Book"<<endl;
     cout<<"2. Show Books"<<endl;
     cout<<"3. Issue Book"<<endl;
@@ -820,7 +807,6 @@ void Studentmenu(Student &student){
     Studentmenu(student);
 }
 void Profmenu(professor &prof){ 
-    //system("CLS");
     cout<<"1. Search Book"<<endl;
     cout<<"2. Show Books"<<endl;
     cout<<"3. Issue Book"<<endl;
