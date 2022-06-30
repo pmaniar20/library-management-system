@@ -10,7 +10,7 @@ To run the code, you need to compile it.
 ``` 
 g++  lbm.cpp -o lbm
 ```
-```
+
 
 It will create a file named lbm.out. Then you can run the code by typing:
 
@@ -49,8 +49,10 @@ class users{
         int type; // 0 for professor, 1 for student, 2 for librarian
         users()
 };
+
 ```
 and its children class:
+
 ```
 class librarian: public users{
     private:
